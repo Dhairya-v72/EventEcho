@@ -258,15 +258,15 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen flex font-sans text-sm" style={{ backgroundColor: '#080D19', color: '#F8FAFC' }}>
+    <div className="min-h-screen w-full min-w-0 flex flex-col md:flex-row font-sans text-sm" style={{ backgroundColor: '#080D19', color: '#F8FAFC' }}>
       
       {/* PROFESSIONAL LEFT SIDEBAR */}
       <aside 
-        className="w-80 shrink-0 flex flex-col border-r sticky top-0 h-screen select-none z-30 text-sm"
+        className="w-full md:w-80 md:shrink-0 flex flex-col border-b md:border-b-0 md:border-r md:sticky md:top-0 md:h-screen select-none z-30 text-sm"
         style={{ backgroundColor: '#0B1220', borderColor: '#263247' }}
       >
         {/* Brand Header */}
-        <div className="p-6 border-b" style={{ borderColor: '#263247' }}>
+        <div className="p-4 md:p-6 border-b" style={{ borderColor: '#263247' }}>
           <div className="flex items-center space-x-3.5">
             <div 
               className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg"
@@ -290,8 +290,8 @@ export default function App() {
         </div>
 
         {/* Sidebar Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <div className="text-xs font-semibold uppercase tracking-wider px-3.5 py-2" style={{ color: '#94A3B8' }}>
+        <nav className="flex flex-row gap-2 overflow-x-auto px-3 py-2 md:flex-1 md:flex-col md:space-y-2 md:overflow-y-auto md:p-4">
+          <div className="hidden md:block text-xs font-semibold uppercase tracking-wider px-3.5 py-2" style={{ color: '#94A3B8' }}>
             Quantitative Modules
           </div>
 
@@ -302,7 +302,7 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center justify-between px-4 py-3.5 text-sm font-semibold rounded-xl transition-all ${
+                className={`w-auto shrink-0 md:w-full flex items-center justify-between px-3 md:px-4 py-2.5 md:py-3.5 text-sm font-semibold rounded-xl transition-all ${
                   isActive ? 'shadow-md text-white font-bold' : 'hover:bg-slate-800/40'
                 }`}
                 style={{
@@ -312,7 +312,7 @@ export default function App() {
               >
                 <div className="flex items-center gap-3.5">
                   <Icon className="w-5 h-5 shrink-0" style={{ color: isActive ? '#FFFFFF' : (item.badge ? '#A78BFA' : '#94A3B8') }} />
-                  <span className="text-left">{item.label}</span>
+                  <span className="text-left whitespace-nowrap">{item.label}</span>
                 </div>
                 {item.badge ? (
                   <span 
@@ -330,7 +330,7 @@ export default function App() {
         </nav>
 
         {/* Sidebar Status Footer */}
-        <div className="p-4 border-t" style={{ borderColor: '#263247' }}>
+        <div className="hidden md:block p-4 border-t" style={{ borderColor: '#263247' }}>
           <div className="p-3.5 rounded-xl border flex items-center gap-3.5" style={{ backgroundColor: '#111B2E', borderColor: '#263247' }}>
             <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: '#34D399' }}></div>
             <div>
@@ -342,23 +342,23 @@ export default function App() {
       </aside>
 
       {/* MAIN WORKSPACE CONTENT */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 overflow-visible md:overflow-y-auto">
         
         {/* Top Header Bar */}
         <header 
-          className="border-b px-8 py-5 flex items-center justify-between sticky top-0 backdrop-blur z-20"
+          className="border-b px-4 py-4 sm:px-6 lg:px-8 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sticky top-0 backdrop-blur z-20"
           style={{ backgroundColor: 'rgba(8, 13, 25, 0.85)', borderColor: '#263247' }}
         >
-          <div>
-            <h2 className="text-lg font-bold text-white tracking-wide">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-wide break-words">
               {navItems.find(n => n.id === activeTab)?.label}
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: '#94A3B8' }}>
+            <p className="hidden xl:block text-xs mt-0.5" style={{ color: '#94A3B8' }}>
               Standardized Residual (Patell Z) • Cross-Sectional OLS Estimation • Transaction Friction Backtesting
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3">
             <span 
               className="text-xs font-mono px-3.5 py-2 rounded-lg border flex items-center gap-2"
               style={{ backgroundColor: '#111B2E', borderColor: '#263247', color: '#94A3B8' }}
@@ -370,11 +370,11 @@ export default function App() {
         </header>
 
         {/* Main Content Body */}
-        <main className="p-8 space-y-6 flex-1">
+        <main className="w-full min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
           
           {/* TOP KPI METRICS STRIP */}
           {kpis && (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <div className="border rounded-xl p-4.5 shadow-sm" style={{ backgroundColor: '#111B2E', borderColor: '#263247' }}>
                 <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#94A3B8' }}>Total Events</span>
                 <p className="text-2xl font-bold mt-1.5 text-white">{kpis.total_events.toLocaleString()}</p>
@@ -454,7 +454,7 @@ export default function App() {
 
                   <div>
                     <label className="text-xs block mb-1.5 font-semibold uppercase tracking-wider" style={{ color: '#94A3B8' }}>Event Window Horizon</label>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {[
                         { label: "[-1, +1] (3d)", size: 1 },
                         { label: "[-3, +3] (7d)", size: 3 },
@@ -479,7 +479,7 @@ export default function App() {
                 </div>
 
                 {/* Volatility Dynamics */}
-                <div className="flex items-center gap-6 border px-5 py-2.5 rounded-xl text-xs font-mono" style={{ backgroundColor: '#0B1220', borderColor: '#263247' }}>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border px-5 py-2.5 rounded-xl text-xs font-mono" style={{ backgroundColor: '#0B1220', borderColor: '#263247' }}>
                   <div>
                     <span className="block" style={{ color: '#94A3B8' }}>Pre-Event Vol:</span>
                     <span className="text-white font-bold text-sm">{caarPayload.pre_volatility_pct}%</span>
@@ -520,7 +520,7 @@ export default function App() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
                     <div className="p-3.5 rounded-lg border" style={{ backgroundColor: '#0B1220', borderColor: '#263247' }}>
                       <span className="text-xs uppercase tracking-wider font-mono block" style={{ color: '#94A3B8' }}>Estimated CAAR</span>
                       <p className="text-xl font-bold font-mono mt-1" style={{ color: significanceSummary.estimate_mean_car_pct >= 0 ? '#34D399' : '#F87171' }}>
@@ -1025,7 +1025,7 @@ export default function App() {
               </div>
 
               {backtestResult && (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                   <div className="border p-4.5 rounded-xl" style={{ backgroundColor: '#0B1220', borderColor: '#263247' }}>
                     <span className="text-xs font-mono" style={{ color: '#94A3B8' }}>Total Trades</span>
                     <p className="text-2xl font-bold text-white mt-1">{backtestResult.total_trades}</p>
