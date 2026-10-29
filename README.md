@@ -1,152 +1,143 @@
-# EventEcho: Quantitative Event Study & Market Reaction Analysis Platform
+# EventEcho: Quantitative Event Study & Financial Machine Learning Platform
 
-[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-19-61DAFB.svg)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-8-646CFF.svg)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38B2AC.svg)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-3B82F6?style=for-the-badge&logo=vercel&logoColor=white)](https://event-echo-chi.vercel.app/)
+[![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://eventecho-r0ia.onrender.com)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4.3-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-An institutional-grade quantitative finance platform that measures how individual equities react to corporate, macroeconomic, and geopolitical news events relative to broad market benchmarks. EventEcho combines econometric market models, standardized residual testing, natural language processing (NLP), and friction-adjusted strategy backtesting into an interactive terminal dashboard.
-
----
-
-## 📌 Executive Summary & The Problem
-
-Corporate earnings announcements, interest rate decisions, policy shifts, and supply chain disruptions trigger market volatility. However, a stock's movement around an announcement often reflects broad market sentiment or random drift. Analysts require a rigorous statistical framework to:
-1. Isolate **Abnormal Performance** against a market benchmark ($R_{it} = \alpha_i + \beta_i R_{mt} + \varepsilon_{it}$).
-2. Test whether observed reactions are **statistically meaningful** rather than random noise (Student $t$-test & **Patell $Z$-score**).
-3. Detect and account for **confounding events** (overlapping announcements for the same company).
-4. Evaluate whether historical patterns generalize to unseen events and survive real-world **transaction costs and slippage**.
+> **Live Application**: [https://event-echo-chi.vercel.app/](https://event-echo-chi.vercel.app/)  
+> **API Documentation**: [https://eventecho-r0ia.onrender.com/docs](https://eventecho-r0ia.onrender.com/docs)
 
 ---
 
-## 🏗️ Architecture & Project Structure
+## 📌 Project Overview
+
+**EventEcho** is an institutional-grade quantitative finance and machine learning platform designed to measure how equities react to corporate announcements, central bank decisions, economic releases, and geopolitical shocks relative to broader market benchmarks.
+
+The platform eliminates causal assumptions by applying econometric market models ($R_{it} = \alpha_i + \beta_i R_{mt} + \varepsilon_{it}$), calculating daily **Abnormal Returns ($AR$)** and **Cumulative Average Abnormal Returns ($CAAR$)**, running statistical significance tests (**Student's $t$-test** and the **Patell $Z$-score** for cross-sectional heteroskedasticity), isolating **confounding/overlapping events**, classifying news headlines with an NLP pipeline, and validating trading hypotheses with **institutional transaction costs and slippage**.
+
+---
+
+## 🚀 Key Features
+
+### 1. Quantitative Event Study & CAAR Trajectories
+- **Market Model OLS Calibration**: Estimates alpha ($\alpha_i$) and systematic beta ($\beta_i$) relative to benchmark indices.
+- **Dynamic Event Horizons**: Interactively toggle between alternative event windows:
+  - Immediate Reaction: $[-1, +1]$ (3 days)
+  - Standard Window: $[-3, +3]$ (7 days)
+  - Extended Drift: $[-5, +5]$ (11 days)
+- **Pre vs. Post Volatility Shift**: Quantifies changes in market volatility before and after news announcements.
+
+### 2. Statistical Significance & Rigor (Priority 1)
+- Reports **CAAR Point Estimate**, **Standard Error ($\text{SE} = s / \sqrt{N}$)**, **$t$-statistic**, and two-tailed **$p$-values**.
+- **Patell Standardized Residual Test ($Z$)**: Normalizes abnormal returns by stock-specific residual variance to prevent high-volatility equities from biasing aggregate tests.
+- **95% Confidence Intervals**: $[CI_{\text{lower}}, CI_{\text{upper}}]$ for estimated abnormal returns.
+- **Formal Hypothesis Verdicts**: Distinguishes statistically meaningful reactions from random market noise ($p < 0.05$).
+
+### 3. Historical Prices & Return Decomposition
+- Inspects reconstructed daily stock prices, benchmark index returns ($R_{mt}$), actual returns ($R_{it}$), normal expected returns ($\mathbb{E}[R_{it}]$), and isolated abnormal returns ($AR_{it}$).
+- Confounding event detection: Flags clustered/same-day overlapping corporate announcements.
+
+### 4. Cross-Sectional Comparisons
+- Side-by-side comparative rankings of average CAR across **Individual Stocks**, **Business Sectors**, and **Event Categories**.
+
+### 5. Out-of-Sample Generalization & Honest Reporting (Priority 3)
+- Strict chronological split at the 70% threshold (In-Sample Calibration vs. Out-of-Sample Forward Validation).
+- Evaluates whether event-driven anomalies persist across different market regimes.
+- Computes pattern decay rates and transparently reports when post-event drift weakens.
+
+### 6. NLP Headline Classifier
+- Real-time text classification pipeline (**TF-IDF + LinearSVC**) trained on historical financial news headlines.
+- Predicts event categories and links them to historical abnormal reaction profiles and trading bias recommendations (Bullish / Bearish / Neutral).
+
+### 7. Event-Driven Strategy Backtester
+- Simulates long/short execution with adjustable **transaction costs & slippage (0 to 30 bps)**.
+- Compares holding periods (3 days vs. 11 days).
+- Computes **Net Portfolio Equity ($10,000 base capital)**, Win Rate, Annualized Sharpe Ratio, Max Drawdown, and Cost Drag.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Details |
+| :--- | :--- | :--- |
+| **Frontend** | **React 19** | Modern functional components with React Hooks |
+| **Build Tool** | **Vite 8** | High-performance bundling and HMR |
+| **Styling** | **Tailwind CSS v4** | Custom Midnight Navy institutional dark palette |
+| **Icons** | **Lucide React** | Clean quantitative and financial vector icons |
+| **Backend API** | **FastAPI** | High-performance asynchronous Python REST framework |
+| **ASGI Server** | **Uvicorn** | Production-ready ASGI server |
+| **Machine Learning**| **Scikit-Learn** | TF-IDF Vectorization, LinearSVC, Stratified K-Fold |
+| **Data Processing** | **Pandas & NumPy** | Vectorized matrix operations and time-series slicing |
+| **Statistics** | **SciPy (stats)** | Student $t$-distributions, Patell $Z$-score, Confidence Intervals |
+| **Model Persistence**| **Joblib** | Serialized ML pipelines (`.joblib`) |
+| **Frontend Host** | **Vercel** | Edge Network deployment with custom routing |
+| **Backend Host** | **Render** | Cloud web service hosting FastAPI |
+
+---
+
+## 📂 Project Directory Structure
 
 ```text
 EventEcho/
-├── notebooks/                              # Step-by-Step Quantitative Research
+├── notebooks/                              # Jupyter Research & Methodology Notebooks
 │   ├── 01_data_cleaning_and_feature_engineering.ipynb
 │   ├── 02_market_model_and_event_study.ipynb
 │   ├── 03_nlp_event_classification.ipynb
 │   └── 04_trading_strategy_and_backtesting.ipynb
-├── src/                                    # Reusable Quantitative Core Engine
-│   └── event_study_engine.py               # Econometric models, Patell Z, OOS tests, Backtester
-├── server/                                 # FastAPI REST Backend
-│   └── main.py                             # API route definitions & CORS handlers
-├── api/                                    # Vercel Serverless Entrypoint
-│   └── index.py                            # Exposes FastAPI app for serverless deployment
-├── client/                                 # React (Vite + Tailwind CSS) Dashboard
+├── src/                                    # Reusable Quantitative Engine
+│   ├── __init__.py
+│   └── event_study_engine.py               # OLS calibration, Patell Z, OOS tests, Backtester
+├── server/                                 # FastAPI Application
+│   ├── __init__.py
+│   └── main.py                             # API endpoints with Vercel CORS configuration
+├── client/                                 # React Frontend (Vite)
 │   ├── src/
-│   │   ├── App.jsx                         # Professional Left-Sidebar Terminal UI
-│   │   ├── index.css                       # Midnight Navy palette design system
-│   │   └── main.jsx
-│   └── package.json
-├── data/                                   # Historical callsets & generated outputs
-│   ├── financial_news_events.csv           # Raw source dataset (3,024 records)
-│   ├── eventecho_master_dataset.csv        # Synthesized stock returns & confounding flags
-│   ├── event_study_results.csv             # AR, CAR [-1,+1], [-3,+3], [-5,+5] calculations
-│   └── backtest_summary.csv                # In-sample vs Out-of-sample performance metrics
+│   │   ├── App.jsx                         # Main dashboard & responsive sidebar
+│   │   ├── index.css                       # Design tokens & Tailwind imports
+│   │   └── main.jsx                        # React root entrypoint
+│   ├── package.json
+│   ├── vercel.json                         # Client-side SPA routing rules
+│   └── vite.config.js
+├── data/                                   # Datasets & Processed Outputs
+│   ├── financial_news_events.csv           # Raw source dataset (3,024 events)
+│   ├── eventecho_master_dataset.csv        # Enriched features & returns
+│   ├── event_study_results.csv             # AR, CAR windows, and SAR scores
+│   └── backtest_summary.csv                # In-sample vs Out-of-sample summary
 ├── models/                                 # Serialized Machine Learning Artifacts
-│   └── event_classifier_pipeline.joblib    # TF-IDF + LinearSVC Pipeline
-├── vercel.json                             # Unified Serverless & SPA deployment configuration
+│   └── event_classifier_pipeline.joblib    # Trained TF-IDF + LinearSVC Pipeline
+├── render.yaml                             # Render Infrastructure-as-Code Blueprint
+├── vercel.json                             # Root Vercel configuration
 ├── requirements.txt                        # Backend dependencies
 └── README.md
 ```
 
 ---
 
-## 📊 Quantitative Methodology
+## 🔬 Mathematical Formulations
 
-### 1. Market Model Calibration (OLS)
-For each company $i$, normal expected returns are estimated over the pre-event window:
+### 1. Market Model (OLS)
 $$\mathbb{E}[R_{it}] = \hat{\alpha}_i + \hat{\beta}_i R_{mt}$$
-where $R_{mt}$ represents the broad market benchmark return, $\hat{\beta}_i$ measures systematic risk exposure, and $\hat{\alpha}_i$ captures baseline drift.
+$$\hat{\beta}_i = \frac{\text{Cov}(R_i, R_m)}{\text{Var}(R_m)}, \quad \hat{\alpha}_i = \bar{R}_i - \hat{\beta}_i \bar{R}_m$$
 
-### 2. Abnormal Returns ($AR$) & Cumulative Abnormal Returns ($CAR$)
-Daily abnormal returns isolate the event shock:
+### 2. Daily Abnormal Return ($AR$)
 $$AR_{it} = R_{it} - \mathbb{E}[R_{it}]$$
-Cumulative abnormal returns aggregate performance across specified event horizons $\tau \in [\tau_1, \tau_2]$:
+
+### 3. Cumulative Abnormal Return ($CAR$)
 $$CAR_i(\tau_1, \tau_2) = \sum_{t=\tau_1}^{\tau_2} AR_{it}$$
 
-### 3. Statistical Testing: Student's $t$-test & Patell $Z$-Score
-To prevent cross-sectional heteroskedasticity from distorting aggregate tests, the platform calculates both:
-- **Cross-Sectional $t$-test**:
-  $$t = \frac{\overline{CAR}}{\text{SE}(CAR)} = \frac{\overline{CAR}}{s / \sqrt{N}}$$
-- **Patell Standardized Residual Test ($Z$)**:
-  $$SAR_{it} = \frac{AR_{it}}{\hat{\sigma}_{\varepsilon i}}, \quad Z = \frac{1}{\sqrt{N}} \sum_{i=1}^N SAR_{it}$$
-Both test statistics are reported alongside 2-tailed $p$-values and 95% Confidence Intervals.
+### 4. Cumulative Average Abnormal Return ($CAAR$)
+$$CAAR(\tau_1, \tau_2) = \frac{1}{N} \sum_{i=1}^N CAR_i(\tau_1, \tau_2)$$
 
-### 4. Confounding Event Isolation
-Events with overlapping corporate announcements within the same observation window are flagged (`Is_Confounded = True`), preventing contaminated events from biasing pure event studies.
-
-### 5. Out-of-Sample Generalization & Honest Reporting
-The dataset is chronologically split at the 70% threshold into:
-- **In-Sample Period (First 70%)**: Hypothesis generation & parameter calibration.
-- **Out-of-Sample Period (Final 30%)**: Forward validation on unseen market regimes.
-The platform computes pattern decay rates and provides transparent diagnostic reports if anomaly magnitude weakens.
+### 5. Patell Standardized Residual Test ($Z$)
+$$SAR_{it} = \frac{AR_{it}}{\hat{\sigma}_{\varepsilon i}}, \quad Z = \frac{1}{\sqrt{N}} \sum_{i=1}^N SAR_{it} \sim \mathcal{N}(0, 1)$$
 
 ---
 
-## 🧠 NLP Financial News Classifier
-
-The platform incorporates an integrated text categorization pipeline:
-- **Preprocessing**: Financial regex cleaning (removing noise while preserving acronyms like Fed, GDP, IPO).
-- **Representation**: N-gram TF-IDF Vectorization (unigrams + bigrams) with sublinear term-frequency scaling.
-- **Classifier**: High-margin **Linear Support Vector Classifier (LinearSVC)** evaluated with Stratified 5-Fold Cross Validation.
-- **Inference**: Given any raw financial headline, the system predicts the event category and matches historical abnormal reaction profiles in real time.
-
----
-
-## 💻 Local Development Setup
-
-### Prerequisites
-- Python 3.10+
-- Node.js 18+ and npm
-
-### 1. Clone & Set Up Backend
-```powershell
-git clone https://github.com/your-username/EventEcho.git
-cd EventEcho
-
-# Install Python requirements
-pip install -r requirements.txt
-
-# Start FastAPI backend
-python -m uvicorn server.main:app --port 8000 --reload
-```
-API Documentation will be live at `http://localhost:8000/docs`.
-
-### 2. Set Up Frontend
-Open a second terminal window:
-```powershell
-cd client
-
-# Install frontend dependencies
-npm install
-
-# Start Vite React development server
-npm run dev
-```
-Open your browser at `http://localhost:5173`.
-
----
-
-## 🚀 Deployment on Vercel
-
-The repository includes a ready-to-deploy [`vercel.json`](./vercel.json) that automatically configures:
-- **FastAPI Backend** as a Python Serverless Function (`api/index.py`).
-- **React Frontend** as a static Single Page Application.
-
-### Quick Deploy:
-1. Push your repository to GitHub.
-2. Go to [vercel.com](https://vercel.com) and click **"Add New Project"**.
-3. Import your `EventEcho` repository.
-4. Leave all default build settings as detected and click **Deploy**.
-
----
-
-## 🎨 UI & Terminal Color System
+## 🎨 UI Color System
 
 | UI Component | Role | Hex Code |
 | :--- | :--- | :--- |
@@ -163,6 +154,44 @@ The repository includes a ready-to-deploy [`vercel.json`](./vercel.json) that au
 
 ---
 
-## 📜 License
-This project is open-source and licensed under the MIT License.
+## 💻 Local Development Setup
 
+### 1. Backend Setup (FastAPI)
+```powershell
+# Clone the repository
+git clone https://github.com/your-username/EventEcho.git
+cd EventEcho
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start backend server
+python -m uvicorn server.main:app --port 8000 --reload
+```
+Interactive Swagger docs: `http://localhost:8000/docs`.
+
+### 2. Frontend Setup (React Vite)
+Open a new terminal window:
+```powershell
+cd client
+
+# Install dependencies
+npm install
+
+# Start Vite dev server
+npm run dev
+```
+Open `http://localhost:5173`.
+
+---
+
+## 🌐 Deployments
+
+- **Frontend**: Deployed on [Vercel](https://event-echo-chi.vercel.app/)
+- **Backend**: Deployed on [Render](https://eventecho-r0ia.onrender.com)
+- **CORS Allowed**: Fully configured between Vercel and Render
+
+---
+
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
