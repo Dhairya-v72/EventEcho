@@ -4,6 +4,7 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+# Add project root to sys.path so we can import from src
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if BASE_DIR not in sys.path:
     sys.path.append(BASE_DIR)
@@ -16,10 +17,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for React frontend
+# CORS configuration explicitly allowing your Vercel deployment
+origins = [
+    "https://event-echo-chi.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "*"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,6 +50,7 @@ def root():
     return {
         "status": "online",
         "service": "EventEcho Quantitative Engine API",
+        "frontend": "https://event-echo-chi.vercel.app",
         "endpoints": [
             "/api/kpis",
             "/api/categories",
@@ -96,7 +105,6 @@ def get_significance_summary(
     sector: str = Query("All", description="Sector filter"),
     window: int = Query(1, description="Event window length (1, 3, or 5)")
 ):
-    """Fulfills Priority 1: Point estimate, SE, t-statistic, p-value, 95% CI, and N."""
     return engine.get_significance_summary(event_filter=event, sector_filter=sector, window_size=window)
 
 
@@ -109,7 +117,6 @@ def get_significance():
 def get_out_of_sample(
     window: int = Query(1, description="Event window length (1, 3, or 5)")
 ):
-    """Fulfills Priority 3: Chronological In-Sample vs Out-of-Sample stability check & honest decay reporting."""
     return engine.get_out_of_sample_validation(window_size=window)
 
 
@@ -128,4 +135,6 @@ def run_backtest(payload: BacktestRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    # Render assigns dynamic port via $PORT
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("server.main:app", host="0.0.0.0", port=port, reload=False)
