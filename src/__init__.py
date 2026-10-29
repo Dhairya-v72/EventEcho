@@ -1,0 +1,2 @@
+# EventEcho core source package
+
